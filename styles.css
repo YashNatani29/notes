@@ -1,0 +1,86 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+#board {
+    width: 90%;
+    height: 90%;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    padding: 10px;
+    overflow: hidden;
+}
+
+#add-note-btn {
+    position: absolute;
+    border-radius: 100%;
+    font-size: -webkit-xxx-large;
+    top: 10px;
+    right: 10px;
+    padding: 0px 14px;
+    background-color: #ffeb3b;
+    border: none;
+    cursor: pointer;
+
+}
+
+.sticky-note {
+    width: 200px;
+    height: 150px;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    resize: both;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sticky-note textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    resize: none;
+    font-weight: bold;
+    text-align: center;
+    overflow: hidden;
+}
+
+.sticky-note .buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-btn, .post-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 12px;
+}
+
+.delete-btn {
+    color: black;
+}
+
+.post-btn {
+    color: black;
+}
+
+.timestamp {
+    font-size: 10px;
+    color: black;
+    text-align: right;
+    margin-top: 5px;
+}
