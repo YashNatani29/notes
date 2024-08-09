@@ -1,22 +1,26 @@
+let noteCounter = 1; // Global counter to track the number of notes
+
 document.getElementById('add-note-btn').addEventListener('click', function() {
     addStickyNote();
 });
 
 function addStickyNote() {
+    
     const board = document.getElementById('board');
     const stickyNote = document.createElement('div');
-    stickyNote.className = 'sticky-note';
+    stickyNote.className = 'sticky-note'; 
     stickyNote.style.top = `${Math.random() * (board.clientHeight - 150)}px`;
     stickyNote.style.left = `${Math.random() * (board.clientWidth - 200)}px`;
     stickyNote.style.backgroundColor = getRandomLightColor();
 
-    const textArea = document.createElement('textarea');
-    textArea.addEventListener('input', function() {
-        adjustFontSize(textArea);
-    });
+    const noteTitle = `#Note-${noteCounter}`; // Generate the note title
 
-    const buttonsDiv = document.createElement('div');
-    buttonsDiv.className = 'buttons';
+    const titleDiv = document.createElement('div'); // Create a div for the title
+    titleDiv.className = 'title';
+    
+    const titleText = document.createElement('div'); 
+    titleText.className = 'note-title';
+    titleText.textContent = noteTitle;
 
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'delete-btn';
@@ -34,21 +38,27 @@ function addStickyNote() {
         textArea.style.cursor = 'default';
         postBtn.style.display = 'none';
  	deleteBtn.style.display = 'none';
+        noteCounter++; // Increment the note counter
     });
 
-    buttonsDiv.appendChild(postBtn);
-    buttonsDiv.appendChild(deleteBtn);
+    titleDiv.appendChild(postBtn);
+    titleDiv.appendChild(titleText);
+    titleDiv.appendChild(deleteBtn);
+
+
+    const textArea = document.createElement('textarea');
+    textArea.addEventListener('input', function() {
+        adjustFontSize(textArea);
+    });
 
     const timestamp = document.createElement('div');
     timestamp.className = 'timestamp';
     timestamp.textContent = getCurrentTimeStamp();
 
-    stickyNote.appendChild(buttonsDiv);
+    stickyNote.appendChild(titleDiv); 
     stickyNote.appendChild(textArea);
     stickyNote.appendChild(timestamp);
-
-
-
+    
     // Make the note draggable
     makeDraggable(stickyNote);
 
@@ -56,33 +66,50 @@ function addStickyNote() {
 }
 
 function makeDraggable(element) {
+        let shiftX, shiftY;
+
+    const moveAt = (pageX, pageY) => {
+        element.style.left = pageX - shiftX + 'px';
+        element.style.top = pageY - shiftY + 'px';
+    };
+
+    const onMouseMove = (event) => {
+        moveAt(event.pageX, event.pageY);
+    };
+
+    const onTouchMove = (event) => {
+        moveAt(event.touches[0].pageX, event.touches[0].pageY);
+    };
+
+    const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    const onTouchEnd = () => {
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+    };
+
     element.onmousedown = function(event) {
-        let shiftX = event.clientX - element.getBoundingClientRect().left;
-        let shiftY = event.clientY - element.getBoundingClientRect().top;
-
-        function moveAt(pageX, pageY) {
-            element.style.left = pageX - shiftX + 'px';
-            element.style.top = pageY - shiftY + 'px';
-        }
-
-        function onMouseMove(event) {
-            moveAt(event.pageX, event.pageY);
-        }
-
-        function onMouseUp() {
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-        }
+        shiftX = event.clientX - element.getBoundingClientRect().left;
+        shiftY = event.clientY - element.getBoundingClientRect().top;
 
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
+    };
 
-        element.onmouseup = null; // Remove any previous onmouseup handler
+    element.ontouchstart = function(event) {
+        shiftX = event.touches[0].clientX - element.getBoundingClientRect().left;
+        shiftY = event.touches[0].clientY - element.getBoundingClientRect().top;
+
+        document.addEventListener('touchmove', onTouchMove);
+        document.addEventListener('touchend', onTouchEnd);
     };
 
     element.ondragstart = function() {
         return false;
-    };
+    }
 }
 
 function adjustFontSize(textArea) {
