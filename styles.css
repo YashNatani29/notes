@@ -35,10 +35,10 @@ body {
     width: 200px;
     height: 150px;
     padding: 10px;
+    padding-top: 30px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     position: absolute;
-    resize: both;
-    overflow: hidden;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -53,13 +53,33 @@ body {
     resize: none;
     font-weight: bold;
     text-align: center;
-    overflow: hidden;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .sticky-note .buttons {
+    position: absolute;
+    top: 5px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    gap: 165px;
+}
+
+.sticky-note .title {
+    position: absolute;
+    top: 5px;
+    width: inherit;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-around;
+}
+.note-title {
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 5px;
 }
 
 .delete-btn, .post-btn {
@@ -70,17 +90,13 @@ body {
     font-size: 12px;
 }
 
-.delete-btn {
-    color: black;
-}
-
-.post-btn {
-    color: black;
-}
-
 .timestamp {
     font-size: 10px;
     color: black;
     text-align: right;
     margin-top: 5px;
+}
+
+.sticky-note textarea::-webkit-scrollbar { 
+    display: none;  /* Hide scrollbar for Chrome, Safari, and Opera */
 }
